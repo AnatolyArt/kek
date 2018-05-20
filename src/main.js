@@ -14,21 +14,24 @@ Vue.use(Vuex)
 
 const ajax = axios.create({
   baseURL: window.location.hostname === 'localhost'  ?  'http://176.103.210.111/admin/' : 'https://admin.scene.ae/',
-  headers: {'content-type': 'application/json'}
+  headers: {'content-type': 'application/json'},
+  withCredentials: true
 });
 
 const store = new Vuex.Store({
   state: {
-    authState: 0
+    authState: 0,
+    authRole: 0,
+    authName: 0,
+    authId: 0
   },
   mutations: {
       authUser (){
-      //  document.cookie = 'userName=Vasya';
         store.authState = 1
-        // alert(document.cookie);
       }
   }
 });
+
 
 router.beforeResolve((to, from, next) => {
   if(to.name === 'Login'){
@@ -48,13 +51,16 @@ new Vue({
   el: '#app',
   router,
   store,
+  created(){
+    // here need to check cookie, or token on server
+    if(this.$cookies.get('sc_admin_token')){
+      this.$store.commit('authUser');
+      this.$router.push('/');
+    }
+  },
   template: '<App/>',
   data(){
     return{
-      token: 0,
-      authState: 0,
-      authUser: 0,
-      authRole: 0,
       ajax
     };
   },

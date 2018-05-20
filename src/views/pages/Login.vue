@@ -52,7 +52,7 @@
           }
         };
 
-        this.$root.ajax.post('login', data)
+        this.$root.ajax.post('login', data, {withCreditinals: true})
           .then((response) => {
             this.$store.commit('authUser');
             this.$router.push('/');
