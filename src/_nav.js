@@ -7,7 +7,7 @@ export default {
     },
     {
       title: true,
-      name: 'Theme',
+      name: 'Dictionaries',
       class: '',
       wrapper: {
         element: '',
@@ -15,9 +15,9 @@ export default {
       }
     },
     {
-      name: 'Colors',
-      url: '/theme/colors',
-      icon: 'icon-drop'
+      name: 'Categories',
+      url: '/dictionaries/categories',
+      icon: 'icon-compass'
     },
     {
       name: 'Typography',

@@ -57,7 +57,7 @@
             this.$store.commit('authUser');
             this.$router.push('/');
           }).catch(function (error) {
-                alert(error);
+            alert(error);
           });
       }
     }

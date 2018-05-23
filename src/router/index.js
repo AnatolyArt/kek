@@ -71,6 +71,12 @@ import Compose from '@/views/ui-kits/Email/Compose'
 import Inbox from '@/views/ui-kits/Email/Inbox'
 import Message from '@/views/ui-kits/Email/Message'
 
+import Categories from '@/views/dictionaries/Categories'
+import Interests from '@/views/dictionaries/Interests'
+import CategoryEdit from '@/views/dictionaries/CategoryEdit'
+
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -90,20 +96,30 @@ export default new Router({
           component: Dashboard
         },
         {
-          path: 'theme',
-          redirect: '/theme/colors',
-          name: 'Theme',
+          path: 'dictionaries',
+          redirect: 'dictionaries/categories',
+          name: 'Dictionaries',
           component: {
             render (c) { return c('router-view') }
           },
           children: [
             {
-              path: 'colors',
-              name: 'Colors',
-              component: Colors
+              path: 'categories',
+              name: 'Categories',
+              component: Categories
             },
             {
-              path: 'typography',
+              path: 'categories/edit/:catid',
+              name: 'Edit Category',
+              component: CategoryEdit
+            },
+            {
+              path: 'interests/:catid',
+              name: 'Interests',
+              component: Interests
+            },
+            {
+              path: 'users',
               name: 'Typography',
               component: Typography
             }

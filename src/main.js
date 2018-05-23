@@ -32,7 +32,6 @@ const store = new Vuex.Store({
   }
 });
 
-
 router.beforeResolve((to, from, next) => {
   if(to.name === 'Login'){
     if(store.authState === 1){
