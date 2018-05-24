@@ -3,5 +3,6 @@
 // TODO: How to merge properly?
 module.exports = {
   NODE_ENV: '"production"',
-  API_HOST: '"http://176.103.210.111/admin/"'
+  API_HOST: '"http://176.103.210.111/admin/"',
+  ASSETS_SUBDIR: 'admin/static'
 }
