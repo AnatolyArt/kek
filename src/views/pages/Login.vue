@@ -52,9 +52,9 @@
           }
         };
 
-        this.$root.ajax.post('login', data, {withCreditinals: true})
+        this.$root.ajax.post('login', data)
           .then((response) => {
-            this.$store.commit('authUser');
+            this.$store.commit('authUser', response.data);
             this.$router.push('/');
           }).catch(function (error) {
             alert(error);

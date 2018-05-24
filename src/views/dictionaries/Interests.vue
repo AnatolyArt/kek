@@ -2,10 +2,12 @@
     <b-card :header="catName">
         <button type="button" class="btn btn-success pull-right m-2">Add new</button>
         <b-table responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
-
-            <template slot="order" slot-scope="data">
-                <i class="fa fa-arrow-down fa-lg"></i>
-                <i class="fa fa-arrow-up fa-lg"></i>
+            <template slot="name" slot-scope="data">
+                <a :href="`#/dictionaries/interests/edit/${data.item.id}`" >{{ data.item.name }}</a>
+            </template>
+            <template slot="order" slot-scope="row">
+                <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
+                <i class="fa fa-arrow-up fa-lg" v-on:click="replaceRow(row.index, 1)"></i>
             </template>
             <template slot="edit" slot-scope="data">
                 <i class="fa fa-pencil fa-lg"></i>
@@ -23,9 +25,8 @@
   export default {
     name: 'Interests',
     created(){
-      this.$root.ajax.get('interests/categories', {withCreditinals: true})
+      this.$root.ajax.get('interests/categories')
         .then((response) => {
-          // TODO change FOR to FIND
           var category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
           this.catName = 'Interest for category: <b>' + category.name + '</b>';
           for(var j = 0; j < category.interests.length; j++){
@@ -68,6 +69,32 @@
       },
       getRowCount (items) {
         return items.length
+      },
+      replaceRow(row, move){
+        var t = this.items[row];
+        // move up
+        console.log(row);
+        if(move === 1){
+          if(row !== 0){
+            this.$set(this.items, row, this.items[row - 1]);
+            this.$set(this.items, row - 1, t);
+          }
+        }else{
+          if(row !== this.items.length - 1){
+            this.$set(this.items, row, this.items[row + 1]);
+            this.$set(this.items, row + 1, t);
+          }
+        }
+
+        var data = {
+          'ids': this.items.map(item => item.id)
+        }
+
+        this.$root.ajax.post('interests/categories/' + this.$route.params.catid + '/reoder', data)
+          .then((response) => {
+          }).catch(function (error) {
+          alert(error);
+        });
       }
     }
   }

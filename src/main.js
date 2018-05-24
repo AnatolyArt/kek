@@ -12,25 +12,45 @@ Vue.use(BootstrapVue)
 Vue.use(VueCookies)
 Vue.use(Vuex)
 
+const store = new Vuex.Store({
+  state: {
+    authState: 0,
+    authRole: 0,
+    authName: 0,
+    authId: 0,
+    token: 0
+  },
+  mutations: {
+      authUser (state, res){
+        var user = res.data.user;
+        store.authRole = user.role;
+        store.authState = 1;
+        store.authName = user.username;
+        store.token = res.data.token;
+        window.localStorage.setItem('token', store.token);
+      },
+      refreshAuth(state, token){
+        store.authState = 1;
+        store.token = token;
+      }
+  }
+});
+
 const ajax = axios.create({
   baseURL: process.env.API_HOST,
   headers: {'content-type': 'application/json'},
   withCredentials: true
 });
 
-const store = new Vuex.Store({
-  state: {
-    authState: 0,
-    authRole: 0,
-    authName: 0,
-    authId: 0
-  },
-  mutations: {
-      authUser (){
-        store.authState = 1
-      }
-  }
+ajax.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  config.headers = {Authorization: store.token, 'content-type': 'application/json'};
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
 });
+
 
 router.beforeResolve((to, from, next) => {
   if(to.name === 'Login'){
@@ -50,10 +70,11 @@ new Vue({
   el: '#app',
   router,
   store,
-  created(){
-    // here need to check cookie, or token on server
-    if(this.$cookies.get('sc_admin_token')){
-      this.$store.commit('authUser');
+  mounted(){
+    // TODO here need to check cookie, or token on server and get userData
+    let token = window.localStorage.getItem('token');
+    if(token){
+      this.$store.commit('refreshAuth', token);
       this.$router.push('/');
     }
   },

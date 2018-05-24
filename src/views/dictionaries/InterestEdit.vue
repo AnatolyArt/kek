@@ -10,7 +10,16 @@
                         <b-col sm="12">
                             <b-form-group>
                                 <label for="name">Name</label>
-                                <b-form-input v-model="name" type="text" id="name" placeholder="Category name"></b-form-input>
+                                <b-form-input v-model="name" type="text" id="name" placeholder="Interest name"></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Category"
+                                    label-for="basicSelect">
+                                <b-form-select id="basicSelect"
+                                               :plain="true"
+                                               :options="catList"
+                                               :value="catid">
+                                </b-form-select>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
                             <b-button type="button" variant="secondary">Cancel</b-button>
@@ -28,26 +37,41 @@
   export default {
     name: 'CategoryEdit',
     created(){
-      if(this.$route.params.catid){
+      if(this.$route.params.id){
+        var interest = null;
         this.$root.ajax.get('interests/categories')
           .then((response) => {
-            var category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
-            this.catid = parseInt(this.$route.params.catid);
-            this.name = category.name;
-            this.title += category.name;
+            for(let i = 0; i < response.data.data.length; i++){
+              var cat = response.data.data[i];
+              if(interest === null){
+                interest = cat.interests.find(x => parseInt(x.id) === parseInt(this.$route.params.id));
+                this.catid = cat.id;
+                this.catname = cat.name;
+              }
+              console.log(this.catid + ' ' + this.catname);
+              this.catList.push({
+                text: cat.name,
+                value: cat.id
+              })
+            }
+            this.catid = parseInt(this.$route.params.id);
+            this.name = interest.name;
+            this.title += interest.name;
           }).catch(function (error) {
           alert(error);
         });
       }else{
-        this.title = 'Add new category';
+        this.title = 'Add new interest';
       }
 
     },
     data: () => {
       return {
         catid: 0,
+        catname: '',
         name: '',
-        title: 'Edit category '
+        title: 'Edit interest  ',
+        catList: []
       }
     },
     methods: {

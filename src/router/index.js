@@ -74,7 +74,7 @@ import Message from '@/views/ui-kits/Email/Message'
 import Categories from '@/views/dictionaries/Categories'
 import Interests from '@/views/dictionaries/Interests'
 import CategoryEdit from '@/views/dictionaries/CategoryEdit'
-
+import InterestEdit from '@/views/dictionaries/InterestEdit'
 
 
 Vue.use(Router)
@@ -114,9 +114,24 @@ export default new Router({
               component: CategoryEdit
             },
             {
+              path: 'categories/add',
+              name: 'Add Category',
+              component: CategoryEdit
+            },
+            {
               path: 'interests/:catid',
               name: 'Interests',
               component: Interests
+            },
+            {
+              path: 'interests/edit/:id',
+              name: 'Edit interest',
+              component: InterestEdit
+            },
+            {
+              path: 'interests/add',
+              name: 'Add interest',
+              component: InterestEdit
             },
             {
               path: 'users',
