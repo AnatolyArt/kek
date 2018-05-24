@@ -13,7 +13,7 @@ Vue.use(VueCookies)
 Vue.use(Vuex)
 
 const ajax = axios.create({
-  baseURL: window.location.hostname === 'localhost'  ?  'http://176.103.210.111/admin/' : 'https://admin.scene.ae/',
+  baseURL: process.env.API_HOST,
   headers: {'content-type': 'application/json'},
   withCredentials: true
 });
