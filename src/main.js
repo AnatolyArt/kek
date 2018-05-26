@@ -76,11 +76,7 @@ new Vue({
   router,
   store,
   mounted(){
-    // TODO here need to check cookie, or token on server and get userData
-    let token = window.localStorage.getItem('token');
-    if(token){
 
-    }
   },
   template: '<App/>',
   data(){
