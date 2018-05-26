@@ -10,7 +10,8 @@
                         <b-col sm="12">
                             <b-form-group>
                                 <label for="name">Name</label>
-                                <b-form-input v-model="name" type="text" id="name" placeholder="Category name"></b-form-input>
+                                <b-form-input v-model="name" type="text" id="name"
+                                              placeholder="Category name"></b-form-input>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
                             <a href="#/dictionaries/categories" class="btn btn-danger" variant="secondary">Cancel</a>
@@ -22,23 +23,28 @@
         </b-row>
         <b-card :header="catName" v-if="catid !== 0">
             <h4 slot="header"
-                class="mb-0">{{catName}}<a type="button" href="#/dictionaries/interests/add" class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
+                class="mb-0">{{catName}}<a type="button" href="#/dictionaries/interests/add"
+                                           class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
             <b-table responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template slot="name" slot-scope="data">
                     {{ data.item.name }}
+
                 </template>
                 <template slot="order" slot-scope="row">
                     <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
                     <i class="fa fa-arrow-up fa-lg" v-on:click="replaceRow(row.index, 1)"></i>
                 </template>
                 <template slot="edit" slot-scope="data">
-                    <a :href="`#/dictionaries/interests/edit/${data.item.id}`" ><i class="fa fa-pencil fa-lg"></i></a>
+                    <a :href="`#/dictionaries/interests/edit/${data.item.id}`"><i class="fa fa-pencil fa-lg"></i></a>
                 </template>
                 <template slot="delete" slot-scope="data">
-                    <i class="fa fa-trash-o fa-lg"></i>
+                    <i class="fa fa-trash-o fa-lg" v-on:click="deleteInterestPopup(data.item.id)"></i>
                 </template>
             </b-table>
         </b-card>
+        <b-modal title="Warning" class="modal-warning" v-model="canDelete" @cancel="canDelete = false" @ok="deleteInterest" ok-variant="warning">
+            Are you sure you want to delete this interest? It will be removed from all scenes also.
+        </b-modal>
     </div>
 </template>
 <script>
@@ -47,7 +53,7 @@
   export default {
     name: 'CategoryEdit',
     created(){
-      if(this.$route.params.catid){
+      if (this.$route.params.catid) {
         this.$root.ajax.get('interests/categories')
           .then((response) => {
             let category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
@@ -62,7 +68,7 @@
           .then((response) => {
             let category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
             this.catName = 'Interest for category: ' + category.name;
-            for(let j = 0; j < category.interests.length; j++){
+            for (let j = 0; j < category.interests.length; j++) {
               this.items.push(
                 {
                   'id': category.interests[j].id,
@@ -73,7 +79,7 @@
           alert(error);
         });
 
-      }else{
+      } else {
         this.title = 'Add new category';
       }
 
@@ -92,28 +98,27 @@
           {key: 'edit'},
           {key: 'delete'}
         ],
-        currentPage: 1,
-        perPage: 100,
-        totalRows: 0
+        delete: 0,
+        canDelete: 0
       }
     },
     methods: {
       addCategory: function () {
-        if(this.name !== ''){
+        if (this.name !== '') {
           var data = {
             'category': {
               'name': this.name
             }
           };
 
-          if(this.$route.params.catid){
+          if (this.$route.params.catid) {
             this.$root.ajax.put('interests/categories/' + this.catid, data)
               .then((response) => {
                 this.$router.push('/dictionaries/categories');
               }).catch(function (error) {
               alert(error);
             });
-          }else{
+          } else {
             this.$root.ajax.post('interests/categories', data)
               .then((response) => {
                 this.$router.push('/dictionaries/categories');
@@ -123,17 +128,34 @@
           }
         }
       },
+      deleteInterestPopup(interest){
+        this.delete = interest;
+        this.canDelete = true;
+        console.log(this.canDelete);
+      },
+      deleteInterest(){
+        if (this.delete !== 0) {
+          this.$root.ajax.delete('interests/' + this.delete)
+            .then((response) => {
+              let index = this.items.findIndex(x => parseInt(x.id) === parseInt(this.delete));
+              this.$delete(this.items, index);
+              this.delete = 0;
+            }).catch(function (error) {
+            alert(error);
+          });
+        }
+      },
       replaceRow(row, move){
         var t = this.items[row];
         // move up
         console.log(row);
-        if(move === 1){
-          if(row !== 0){
+        if (move === 1) {
+          if (row !== 0) {
             this.$set(this.items, row, this.items[row - 1]);
             this.$set(this.items, row - 1, t);
           }
-        }else{
-          if(row !== this.items.length - 1){
+        } else {
+          if (row !== this.items.length - 1) {
             this.$set(this.items, row, this.items[row + 1]);
             this.$set(this.items, row + 1, t);
           }

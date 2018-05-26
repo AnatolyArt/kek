@@ -23,7 +23,7 @@
                                 </b-form-select>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
-                            <b-button type="button" variant="secondary">Cancel</b-button>
+                            <a class="button btn btn-danger" :href="`#/dictionaries/categories/edit/${catid}`">Cancel</a>
                         </b-col>
                     </b-row>
 

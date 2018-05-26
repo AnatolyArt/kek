@@ -98,7 +98,6 @@
             }).catch(function (error) {
             alert(error);
           });
-
         }
       },
       replaceRow(row, move){
