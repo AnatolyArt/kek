@@ -37,6 +37,11 @@
 <script>
   export default {
     name: 'Login',
+    created(){
+      if(this.$store.authState === 1){
+        this.$router.push('/');
+      }
+    },
     data () {
       return {
         login: '',

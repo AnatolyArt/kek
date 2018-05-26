@@ -53,14 +53,19 @@ ajax.interceptors.request.use(function (config) {
 
 
 router.beforeResolve((to, from, next) => {
-  if(to.name === 'Login'){
-    if(store.authState === 1){
-      next('/');
+  let token = window.localStorage.getItem('token');
+  if(!token){
+    if(to.name === 'Login'){
+      if(store.authState === 1){
+        next('/');
+      }
+    }else{
+      if(store.authState !== 1){
+        next('/pages/login');
+      }
     }
   }else{
-    if(store.authState !== 1){
-      next('/pages/login');
-    }
+    store.commit('refreshAuth', token);
   }
   next();
 })
@@ -74,8 +79,7 @@ new Vue({
     // TODO here need to check cookie, or token on server and get userData
     let token = window.localStorage.getItem('token');
     if(token){
-      this.$store.commit('refreshAuth', token);
-      this.$router.push('/');
+
     }
   },
   template: '<App/>',
