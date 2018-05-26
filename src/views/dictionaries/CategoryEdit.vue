@@ -4,7 +4,7 @@
             <b-col sm="12">
                 <b-card>
                     <div slot="header">
-                        <strong>{{title}}</strong>
+                        <h4>{{title}}</h4>
                     </div>
                     <b-row>
                         <b-col sm="12">
@@ -13,13 +13,32 @@
                                 <b-form-input v-model="name" type="text" id="name" placeholder="Category name"></b-form-input>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
-                            <b-button type="button" variant="secondary">Cancel</b-button>
+                            <a href="#/dictionaries/categories" class="btn btn-danger" variant="secondary">Cancel</a>
                         </b-col>
                     </b-row>
 
                 </b-card>
             </b-col>
         </b-row>
+        <b-card :header="catName" v-if="catid !== 0">
+            <h4 slot="header"
+                class="mb-0">{{catName}}<a type="button" href="#/dictionaries/interests/add" class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
+            <b-table responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
+                <template slot="name" slot-scope="data">
+                    {{ data.item.name }}
+                </template>
+                <template slot="order" slot-scope="row">
+                    <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
+                    <i class="fa fa-arrow-up fa-lg" v-on:click="replaceRow(row.index, 1)"></i>
+                </template>
+                <template slot="edit" slot-scope="data">
+                    <a :href="`#/dictionaries/interests/edit/${data.item.id}`" ><i class="fa fa-pencil fa-lg"></i></a>
+                </template>
+                <template slot="delete" slot-scope="data">
+                    <i class="fa fa-trash-o fa-lg"></i>
+                </template>
+            </b-table>
+        </b-card>
     </div>
 </template>
 <script>
@@ -31,13 +50,29 @@
       if(this.$route.params.catid){
         this.$root.ajax.get('interests/categories')
           .then((response) => {
-            var category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
+            let category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
             this.catid = parseInt(this.$route.params.catid);
             this.name = category.name;
             this.title += category.name;
           }).catch(function (error) {
           alert(error);
         });
+
+        this.$root.ajax.get('interests/categories')
+          .then((response) => {
+            let category = response.data.data.find(x => parseInt(x.id) === parseInt(this.$route.params.catid));
+            this.catName = 'Interest for category: ' + category.name;
+            for(let j = 0; j < category.interests.length; j++){
+              this.items.push(
+                {
+                  'id': category.interests[j].id,
+                  'name': category.interests[j].name
+                })
+            }
+          }).catch(function (error) {
+          alert(error);
+        });
+
       }else{
         this.title = 'Add new category';
       }
@@ -47,7 +82,19 @@
       return {
         catid: 0,
         name: '',
-        title: 'Edit category '
+        title: 'Edit category ',
+        catName: '',
+        items: [],
+        fields: [
+          {key: 'id'},
+          {key: 'name'},
+          {key: 'order'},
+          {key: 'edit'},
+          {key: 'delete'}
+        ],
+        currentPage: 1,
+        perPage: 100,
+        totalRows: 0
       }
     },
     methods: {
@@ -75,6 +122,32 @@
             });
           }
         }
+      },
+      replaceRow(row, move){
+        var t = this.items[row];
+        // move up
+        console.log(row);
+        if(move === 1){
+          if(row !== 0){
+            this.$set(this.items, row, this.items[row - 1]);
+            this.$set(this.items, row - 1, t);
+          }
+        }else{
+          if(row !== this.items.length - 1){
+            this.$set(this.items, row, this.items[row + 1]);
+            this.$set(this.items, row + 1, t);
+          }
+        }
+
+        var data = {
+          'ids': this.items.map(item => item.id)
+        }
+
+        this.$root.ajax.post('interests/categories/' + this.$route.params.catid + '/reoder', data)
+          .then((response) => {
+          }).catch(function (error) {
+          alert(error);
+        });
       }
     }
   }

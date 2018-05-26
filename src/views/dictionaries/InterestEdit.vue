@@ -1,4 +1,5 @@
 <template>
+
     <div class="animated fadeIn">
         <b-row>
             <b-col sm="12">
@@ -18,7 +19,7 @@
                                 <b-form-select id="basicSelect"
                                                :plain="true"
                                                :options="catList"
-                                               :value="catid">
+                                               v-model="catid">
                                 </b-form-select>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
@@ -38,29 +39,39 @@
     name: 'CategoryEdit',
     created(){
       if(this.$route.params.id){
-        var interest = null;
+        let interest = null;
         this.$root.ajax.get('interests/categories')
           .then((response) => {
             for(let i = 0; i < response.data.data.length; i++){
-              var cat = response.data.data[i];
+              let cat = response.data.data[i];
               if(interest === null){
                 interest = cat.interests.find(x => parseInt(x.id) === parseInt(this.$route.params.id));
                 this.catid = cat.id;
                 this.catname = cat.name;
               }
-              console.log(this.catid + ' ' + this.catname);
               this.catList.push({
                 text: cat.name,
                 value: cat.id
               })
             }
-            this.catid = parseInt(this.$route.params.id);
             this.name = interest.name;
             this.title += interest.name;
           }).catch(function (error) {
           alert(error);
         });
       }else{
+        this.$root.ajax.get('interests/categories')
+          .then((response) => {
+            for(let i = 0; i < response.data.data.length; i++){
+              let cat = response.data.data[i];
+              this.catList.push({
+                text: cat.name,
+                value: cat.id
+              })
+            }
+          }).catch(function (error) {
+          alert(error);
+        });
         this.title = 'Add new interest';
       }
 
@@ -78,22 +89,25 @@
       addCategory: function () {
         if(this.name !== ''){
           var data = {
-            'category': {
-              'name': this.name
+            'interest': {
+              'themes': [],
+              'ownerships': [],
+              'name': this.name,
+              'category_id': this.catid
             }
           };
 
-          if(this.$route.params.catid){
-            this.$root.ajax.put('interests/categories/' + this.catid, data)
+          if(this.$route.params.id){
+            this.$root.ajax.put('interests/' + this.$route.params.id, data)
               .then((response) => {
-                this.$router.push('/dictionaries/categories');
+                this.$router.push('/dictionaries/categories/' + this.catid);
               }).catch(function (error) {
               alert(error);
             });
           }else{
-            this.$root.ajax.post('interests/categories', data)
+            this.$root.ajax.post('interests', data)
               .then((response) => {
-                this.$router.push('/dictionaries/categories');
+                this.$router.push('/dictionaries/categories/' + this.catid);
               }).catch(function (error) {
               alert(error);
             });

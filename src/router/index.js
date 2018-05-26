@@ -72,7 +72,6 @@ import Inbox from '@/views/ui-kits/Email/Inbox'
 import Message from '@/views/ui-kits/Email/Message'
 
 import Categories from '@/views/dictionaries/Categories'
-import Interests from '@/views/dictionaries/Interests'
 import CategoryEdit from '@/views/dictionaries/CategoryEdit'
 import InterestEdit from '@/views/dictionaries/InterestEdit'
 
@@ -117,11 +116,6 @@ export default new Router({
               path: 'categories/add',
               name: 'Add Category',
               component: CategoryEdit
-            },
-            {
-              path: 'interests/:catid',
-              name: 'Interests',
-              component: Interests
             },
             {
               path: 'interests/edit/:id',

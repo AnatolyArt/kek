@@ -1,9 +1,10 @@
 <template>
     <b-card :header="caption">
-        <a type="button" href="#/dictionaries/categories/add" class="btn btn-success pull-right m-2">Add new</a>
+        <h4 slot="header"
+            class="mb-0">{{caption}}<a type="button" href="#/dictionaries/categories/add" class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
         <b-table responsive="sm" :items="items" :fields="fields" ref="table">
             <template slot="name" slot-scope="data">
-                <a :href="`#/dictionaries/interests/${data.item.id}`" >{{ data.item.name }}</a>
+                {{ data.item.name }}
             </template>
             <template slot="order" slot-scope="row">
                 <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
