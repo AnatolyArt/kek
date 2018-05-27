@@ -28,6 +28,7 @@
         .then((response) => {
           for(var i = 0; i < response.data.data.length; i++){
             var value =  response.data.data[i];
+            this.$root.interests = response.data.data;
             this.items.push(
               {
                 'id': value.id,

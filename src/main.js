@@ -81,7 +81,8 @@ new Vue({
   template: '<App/>',
   data(){
     return{
-      ajax
+      ajax,
+      interests
     };
   },
   methods:{
