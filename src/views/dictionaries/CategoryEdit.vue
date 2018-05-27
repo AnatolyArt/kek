@@ -3,9 +3,9 @@
         <b-row>
             <b-col sm="12">
                 <b-card>
-                    <div slot="header">
-                        <h4>{{title}}</h4>
-                    </div>
+                    <h4 slot="header"
+                        class="mb-0">{{title}}<a type="button" href="#/dictionaries/interests/add"
+                                                   class="btn btn-sm btn-danger pull-right m-0">Delete category</a></h4>
                     <b-row>
                         <b-col sm="12">
                             <b-form-group>
@@ -44,6 +44,13 @@
         </b-card>
         <b-modal title="Warning" class="modal-warning" v-model="canDelete" @cancel="canDelete = false" @ok="deleteInterest" ok-variant="warning">
             Are you sure you want to delete this interest? It will be removed from all scenes also.
+        </b-modal>
+
+        <b-modal title="Error" class="modal-danger" v-model="errorDeleteCat" @ok="errorDeleteCat = false" cancel-variant=" d-none">
+            You can't delete category which contains interests, please delete or move interests first.
+         </b-modal>
+        <b-modal title="Warning" class="modal-warning" v-model="canDeleteCat" @cancel="errorDeleteCat = false" @ok="deleteCategory" ok-variant="warning">
+            Are you sure you want to delete this category?
         </b-modal>
     </div>
 </template>

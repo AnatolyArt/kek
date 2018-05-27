@@ -71,10 +71,11 @@ import Compose from '@/views/ui-kits/Email/Compose'
 import Inbox from '@/views/ui-kits/Email/Inbox'
 import Message from '@/views/ui-kits/Email/Message'
 
+// Views - Dictionary
 import Categories from '@/views/dictionaries/Categories'
 import CategoryEdit from '@/views/dictionaries/CategoryEdit'
 import InterestEdit from '@/views/dictionaries/InterestEdit'
-
+import Lifestyles from '@/views/dictionaries/Lifestyles'
 
 Vue.use(Router)
 
@@ -128,9 +129,9 @@ export default new Router({
               component: InterestEdit
             },
             {
-              path: 'users',
-              name: 'Typography',
-              component: Typography
+              path: 'lifestyles',
+              name: 'Lifestyles',
+              component: Lifestyles
             }
           ]
         },

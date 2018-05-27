@@ -4,9 +4,10 @@
         <b-row>
             <b-col sm="12">
                 <b-card>
-                    <div slot="header">
-                        <strong>{{title}}</strong>
-                    </div>
+                    <h4 slot="header"
+                        class="mb-0">{{title}}
+                        <a type="button" href="#/dictionaries/interests/add" class="btn btn-sm btn-danger pull-right m-0">Delete interest</a>
+                    </h4>
                     <b-row>
                         <b-col sm="12">
                             <b-form-group>

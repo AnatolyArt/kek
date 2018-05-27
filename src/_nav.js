@@ -17,6 +17,11 @@ export default {
     {
       name: 'Categories',
       url: '/dictionaries/categories',
+      icon: 'icon-layers'
+    },
+    {
+      name: 'Lifestyles',
+      url: '/dictionaries/lifestyles',
       icon: 'icon-compass'
     },
     {
