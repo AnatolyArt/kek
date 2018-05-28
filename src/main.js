@@ -80,9 +80,9 @@ new Vue({
   },
   template: '<App/>',
   data(){
-    return{
+    return {
       ajax,
-      interests
+      lifestyles: []
     };
   },
   methods:{

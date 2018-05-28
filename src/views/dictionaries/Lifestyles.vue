@@ -11,7 +11,7 @@
                     <i class="fa fa-arrow-up fa-lg" v-on:click="replaceRow(row.index, 1)"></i>
                 </template>
                 <template slot="edit" slot-scope="data">
-                    <a :href="`#/dictionaries/interests/edit/${data.item.id}`" ><i class="fa fa-pencil fa-lg"></i></a>
+                    <a :href="`#/dictionaries/lifestyles/edit/${data.item.id}`" ><i class="fa fa-pencil fa-lg"></i></a>
                 </template>
             </b-table>
         </b-card>
@@ -28,7 +28,7 @@
         .then((response) => {
           for(var i = 0; i < response.data.data.length; i++){
             var value =  response.data.data[i];
-            this.$root.interests = response.data.data;
+            this.$root.lifestyles[value.id] = value;
             this.items.push(
               {
                 'id': value.id,

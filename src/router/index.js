@@ -76,6 +76,7 @@ import Categories from '@/views/dictionaries/Categories'
 import CategoryEdit from '@/views/dictionaries/CategoryEdit'
 import InterestEdit from '@/views/dictionaries/InterestEdit'
 import Lifestyles from '@/views/dictionaries/Lifestyles'
+import LifestylesEdit from '@/views/dictionaries/LifestylesEdit'
 
 Vue.use(Router)
 
@@ -132,6 +133,11 @@ export default new Router({
               path: 'lifestyles',
               name: 'Lifestyles',
               component: Lifestyles
+            },
+            {
+              path: 'lifestyles/edit/:themeId',
+              name: 'Add interest',
+              component: LifestylesEdit
             }
           ]
         },

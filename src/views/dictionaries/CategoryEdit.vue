@@ -28,7 +28,6 @@
             <b-table responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template slot="name" slot-scope="data">
                     {{ data.item.name }}
-
                 </template>
                 <template slot="order" slot-scope="row">
                     <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
