@@ -7,10 +7,31 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 import VueCookies from 'vue-cookies'
+import VueNotifications from 'vue-notifications'
+import miniToastr from 'mini-toastr'
 
 Vue.use(BootstrapVue)
 Vue.use(VueCookies)
 Vue.use(Vuex)
+
+miniToastr.init({types: {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}})
+
+function toast ({title, message, type, timeout, cb}) {
+  return miniToastr[type](message, title, timeout, cb)
+}
+
+Vue.use(VueNotifications, {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+})
+
 
 const store = new Vuex.Store({
   state: {

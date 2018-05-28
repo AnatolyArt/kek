@@ -6,33 +6,28 @@
                     <h4 slot="header" class="mb-0">{{title}}</h4>
                     <b-row>
                         <b-col sm="12">
-                            <b-form-group>
+                            <b-form-group validated>
                                 <label>Name</label>
                                 <b-form-input v-model="lifestyle.name" type="text" id="name"
-                                              placeholder="Lifestyle name"></b-form-input>
-                            </b-form-group>
-                            <b-form-group>
+                                              placeholder="Lifestyle name" required></b-form-input>
                                 <label>Description</label>
                                 <b-form-textarea v-model="lifestyle.description" type="text" id="description"
-                                                 placeholder="Description"></b-form-textarea>
+                                                 placeholder="Description" required></b-form-textarea>
                             </b-form-group>
                             <b-form-group>
                                 <label>Image</label>
                                 <div class="crop-image">
-                                    <b-img class="thumbinal" :src="getImage()" alt="Thumbnail" id="image"
-                                           v-on:click="myModal = true"/>
+                                    <vue-base64-file-upload
+                                            class="v1"
+                                            accept="image/png,image/jpeg"
+                                            image-class="thumbinal"
+                                            :default-preview="this.lifestyle.image_url"
+                                            input-class="v1-input"
+                                            @load="getImageJson"
+                                            placeholder="Select image" />
                                 </div>
-                                <div>
-                                    <button v-on:click="revertImage()" class="button btn btn-danger btn-sm mt-2 mb-2" v-if="imagePreview !== ''">
-                                        revert image
-                                    </button>
-                                </div>
-                                <p>
-                                    <b-form-file id="fileInput" :plain="true" @change="previewImage"
-                                                 accept="image/*" v-model="imageFile" ref="imageFile"></b-form-file>
-                                </p>
                             </b-form-group>
-                            <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
+                            <b-button type="submit" variant="primary" v-on:click="save()">Save changes</b-button>
                             <a class="button btn btn-danger" href="#/dictionaries/lifestyles">Cancel</a>
                         </b-col>
                     </b-row>
@@ -48,9 +43,15 @@
 </template>
 <script>
 
+  import VueBase64FileUpload from 'vue-base64-file-upload';
+  import VueNotifications from 'vue-notifications'
+  import miniToastr from 'mini-toastr'
 
   export default {
     name: 'LifestylesEdit',
+    components: {
+      VueBase64FileUpload
+    },
     created(){
       if (this.$route.params.themeId) {
         // change this to external function
@@ -65,15 +66,20 @@
             }).catch(function (error) {
             alert(error);
           });
+        }else{
+          this.lifestyle = this.$root.lifestyles[this.$route.params.themeId];
         }
       }
     },
     data: () => {
       return {
         lifestyle: {},
-        title: 'Edit lifestyle',
+        title: 'Lifestyle form',
         imagePreview: '',
         myModal: false,
+        newImage: false,
+        valide: true,
+        fileLink: '',
         imageFile: ''
       }
     },
@@ -84,40 +90,35 @@
         }
         return this.lifestyle.image_url;
       },
-      revertImage(){
-        this.imagePreview = '';
-        this.imageFile = '';
-        this.$refs.imageFile.reset();
+      getImageJson(data){
+        this.fileLink = data;
+        this.newImage = true;
       },
-      addCategory: function () {
-        if (this.name !== '') {
+      save(){
+        if(this.lifestyle.name && this.lifestyle.description){
+          // /themes/129
+
           var data = {
-            'interest': {
-              'themes': [],
-              'ownerships': [],
-              'name': this.name,
-              'category_id': this.catid
+            'theme': {
+              'name': this.lifestyle.name,
+              'description': this.lifestyle.description,
+              'image': this.fileLink.split(',')[1]
             }
           };
 
-          if (this.$route.params.id) {
-            this.$root.ajax.put('interests/' + this.$route.params.id, data)
-              .then((response) => {
-                this.$router.push('/dictionaries/categories/' + this.catid);
-              }).catch(function (error) {
-              alert(error);
-            });
-          } else {
-            this.$root.ajax.post('interests', data)
-              .then((response) => {
-                this.$router.push('/dictionaries/categories/' + this.catid);
-              }).catch(function (error) {
-              alert(error);
-            });
-          }
+          this.$root.ajax.put('themes/' + this.$route.params.themeId, data)
+            .then((response) => {
+              miniToastr.success('Lifestyle saved', 'Success');
+            }).catch(function (error) {
+            miniToastr.error(error, 'Error');
+          });
+
+
         }
       },
       previewImage: function (event) {
+        // To FUTURE! MB
+        this.fileLink = event.target.files[0];
         // Reference to the DOM input element
         var input = event.target;
         // Ensure that you have a file before attempting to read it
