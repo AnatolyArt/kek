@@ -29,7 +29,7 @@
                                 </div>
                                 <p>
                                     <b-form-file id="fileInput" :plain="true" @change="previewImage"
-                                                 accept="image/*" v-model="imageFile"></b-form-file>
+                                                 accept="image/*" v-model="imageFile" ref="imageFile"></b-form-file>
                                 </p>
                             </b-form-group>
                             <b-button type="submit" variant="primary" v-on:click="addCategory()">Save changes</b-button>
@@ -87,6 +87,7 @@
       revertImage(){
         this.imagePreview = '';
         this.imageFile = '';
+        this.$refs.imageFile.reset();
       },
       addCategory: function () {
         if (this.name !== '') {
