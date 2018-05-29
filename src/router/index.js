@@ -77,6 +77,8 @@ import CategoryEdit from '@/views/dictionaries/CategoryEdit'
 import InterestEdit from '@/views/dictionaries/InterestEdit'
 import Lifestyles from '@/views/dictionaries/Lifestyles'
 import LifestylesEdit from '@/views/dictionaries/LifestylesEdit'
+import Scenes from '@/views/manage/Scenes'
+import SceneEdit from '@/views/manage/SceneEdit'
 
 Vue.use(Router)
 
@@ -138,6 +140,26 @@ export default new Router({
               path: 'lifestyles/edit/:themeId',
               name: 'Add interest',
               component: LifestylesEdit
+            }
+          ]
+        },
+        {
+          path: 'manage',
+          redirect: 'manage/scenes',
+          name: 'Manage',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'scenes',
+              name: 'Scenes',
+              component: Scenes
+            },
+            {
+              path: 'scenes/edit/:sceneId',
+              name: 'Edit Scene',
+              component: SceneEdit
             }
           ]
         },

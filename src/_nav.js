@@ -31,6 +31,25 @@ export default {
     },
     {
       title: true,
+      name: 'Manage',
+      class: '',
+      wrapper: {
+        element: '',
+        attributes: {}
+      }
+    },
+    {
+      name: 'Scenes',
+      url: '/manage/scenes',
+      icon: 'icon-directions'
+    },
+    {
+      name: 'Users',
+      url: '#',
+      icon: 'icon-user'
+    },
+    {
+      title: true,
       name: 'Components',
       class: '',
       wrapper: {
