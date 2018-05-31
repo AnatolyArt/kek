@@ -68,13 +68,13 @@ const store = new Vuex.Store({
 });
 
 const ajax = axios.create({
-  baseURL: 'http://localhost/' + 'admin',
+  baseURL: 'http://localhost:80/' + 'admin',
   headers: {'content-type': 'application/json'},
   withCredentials: true
 });
 
 const fileStorage = axios.create({
-  baseURL: 'http://localhost/' + 'storage',
+  baseURL: 'http://localhost:80/' + 'storage',
   withCredentials: true
 });
 

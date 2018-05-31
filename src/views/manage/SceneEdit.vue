@@ -290,11 +290,12 @@
       },
       changeFile: function(event) {
         var input = event.target;
-        const myFile = input.files[0];
+        var myFile = input.files[0];
         const reader = new FileReader()
         reader.onload = (e) => {
-          this.$root.fileStorage.post('event', myFile).then((response) => {
-            console.log(response);
+          this.$root.fileStorage.post('/event', myFile).then((response) => {
+            myFile = null;
+            input.value = '';
           }).catch(function (error) {
             console.log(error);
           });
