@@ -57,7 +57,7 @@ const store = new Vuex.Store({
         store.authState = 1;
         store.token = token;
       },
-      clear(state){
+      logout(state){
         store.authRole = 0;
         store.authState = 0;
         store.authName = '';

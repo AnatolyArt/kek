@@ -13,8 +13,8 @@
       return { itemsCount: 42 }
     },
     methods: {
-      logout: () => {
-        window.localStorage.removeItem('token');
+      logout() {
+        this.$store.commit('logout');
         this.$router.push('/pages/login');
       }
     }
