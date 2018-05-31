@@ -25,11 +25,6 @@ export default {
       icon: 'icon-compass'
     },
     {
-      name: 'Typography',
-      url: '/theme/typography',
-      icon: 'icon-pencil'
-    },
-    {
       title: true,
       name: 'Manage',
       class: '',

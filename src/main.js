@@ -9,10 +9,13 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
+import Grid from 'vue-js-grid'
+
 
 Vue.use(BootstrapVue)
 Vue.use(VueCookies)
 Vue.use(Vuex)
+Vue.use(Grid)
 
 miniToastr.init({types: {
   success: 'success',
@@ -58,8 +61,13 @@ const store = new Vuex.Store({
 });
 
 const ajax = axios.create({
-  baseURL: process.env.API_HOST,
+  baseURL: process.env.API_HOST + 'admin/',
   headers: {'content-type': 'application/json'},
+  withCredentials: true
+});
+
+const fileStorage = axios.create({
+  baseURL: process.env.API_HOST + 'storage',
   withCredentials: true
 });
 
@@ -72,6 +80,14 @@ ajax.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
+fileStorage.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  config.headers = {Authorization: store.token};
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
+});
 
 router.beforeResolve((to, from, next) => {
   let token = window.localStorage.getItem('token');
@@ -103,6 +119,7 @@ new Vue({
   data(){
     return {
       ajax,
+      fileStorage,
       lifestyles: []
     };
   },
