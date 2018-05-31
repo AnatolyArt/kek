@@ -56,6 +56,13 @@ const store = new Vuex.Store({
       refreshAuth(state, token){
         store.authState = 1;
         store.token = token;
+      },
+      clear(state){
+        store.authRole = 0;
+        store.authState = 0;
+        store.authName = '';
+        store.token = '';
+        window.localStorage.removeItem('token');
       }
   }
 });
