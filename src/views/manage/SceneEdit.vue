@@ -1,12 +1,18 @@
 <template>
     <div class="animated fadeIn">
         <b-row>
-            <b-col sm="6">
+            <b-col sm="6" md="12" lg="6">
                 <b-card>
                     <h4 slot="header" class="mb-0">{{title}}</h4>
                     <b-row>
                         <b-col sm="12">
                             <b-form-group validated>
+                                <GmapMap
+                                        :center="{lat:10, lng:10}"
+                                        :zoom="7"
+                                        map-type-id="terrain"
+                                        style="width: 500px; height: 300px"
+                                ></GmapMap>
                                 <label>Name</label>
                                 <b-form-input v-model="scene.name" type="text" id="name"
                                               placeholder="Scene name" required></b-form-input>
@@ -166,7 +172,9 @@
                                         :cellWidth="81"
                                         :cellHeight="81">
                                     <template slot="cell" scope="props">
-                                        <div class="bgthb" v-bind:style="{ background: 'url(' + props.item + ')' }"></div>
+                                        <div class="bgthb" v-bind:style="{ background: 'url(' + props.item + ')' }">
+                                            <i @click="removeImage(props.item)" class="fa fa-close close-icon-image"></i>
+                                        </div>
                                     </template>
                                 </grid>
                             </div>
@@ -183,7 +191,7 @@
 
                 </b-card>
             </b-col>
-            <b-col sm="6">
+            <b-col sm="6" md="12" lg="6">
                 <b-card>
                     <h4 slot="header" class="mb-0">Scene stats</h4>
                     Coming soon
@@ -282,6 +290,11 @@
       }
     },
     methods: {
+      removeImage (img) {
+        var index = this.imagesList.indexOf(img);
+        if (index !== -1) this.imagesList.splice(index, 1);
+        //ajax to remove image
+      },
       getImage(){
         if (this.imagePreview) {
           return this.imagePreview;

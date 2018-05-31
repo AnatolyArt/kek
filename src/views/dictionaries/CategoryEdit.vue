@@ -23,7 +23,7 @@
         </b-row>
         <b-card :header="catName" v-if="catid !== 0">
             <h4 slot="header"
-                class="mb-0">{{catName}}<a type="button" href="#/dictionaries/interests/add"
+                class="mb-0">{{catName}}<a type="button" :href="`#/dictionaries/interests/add/${catid}`"
                                            class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
             <b-table responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template slot="name" slot-scope="data">
@@ -104,6 +104,8 @@
           {key: 'edit'},
           {key: 'delete'}
         ],
+        canDeleteCat: false,
+        errorDeleteCat: false,
         delete: 0,
         canDelete: 0
       }

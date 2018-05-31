@@ -33,6 +33,7 @@ module.exports = {
     'keyword-spacing': 0,
     'key-spacing': 0,
     'padded-blocks': 0,
-    'no-trailing-spaces': 0
+    'no-trailing-spaces': 0,
+    'spaced-comment': 0
   }
 }

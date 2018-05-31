@@ -10,7 +10,14 @@ import VueCookies from 'vue-cookies'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
 import Grid from 'vue-js-grid'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDEjOQAHSlARvhAs3EloOaRVud0GUl1sGo',
+    libraries: 'places'
+  }
+})
 
 Vue.use(BootstrapVue)
 Vue.use(VueCookies)

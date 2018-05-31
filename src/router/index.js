@@ -41,8 +41,6 @@ import CodeEditors from '@/views/editors/CodeEditors'
 import BasicForms from '@/views/forms/BasicForms'
 import AdvancedForms from '@/views/forms/AdvancedForms'
 
-import GoogleMaps from '@/views/GoogleMaps'
-
 // Views - Icons
 import Flags from '@/views/icons/Flags'
 import FontAwesome from '@/views/icons/FontAwesome'
@@ -127,7 +125,7 @@ export default new Router({
               component: InterestEdit
             },
             {
-              path: 'interests/add',
+              path: 'interests/add/:catid',
               name: 'Add interest',
               component: InterestEdit
             },
@@ -313,11 +311,6 @@ export default new Router({
               component: AdvancedForms
             }
           ]
-        },
-        {
-          path: 'google-maps',
-          name: 'Google Maps',
-          component: GoogleMaps
         },
         {
           path: 'icons',

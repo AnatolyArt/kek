@@ -39,6 +39,10 @@
   export default {
     name: 'CategoryEdit',
     created(){
+      if(this.$route.params.catid){
+        this.catid = this.$route.params.catid;
+        console.log(this.catid);
+      }
       if(this.$route.params.id){
         let interest = null;
         this.$root.ajax.get('interests/categories')
