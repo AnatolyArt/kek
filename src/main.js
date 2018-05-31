@@ -68,13 +68,13 @@ const store = new Vuex.Store({
 });
 
 const ajax = axios.create({
-  baseURL: process.env.API_HOST + 'admin/',
+  baseURL: 'http://localhost/' + 'admin',
   headers: {'content-type': 'application/json'},
   withCredentials: true
 });
 
 const fileStorage = axios.create({
-  baseURL: process.env.API_HOST + 'storage',
+  baseURL: 'http://localhost/' + 'storage',
   withCredentials: true
 });
 
@@ -89,7 +89,9 @@ ajax.interceptors.request.use(function (config) {
 
 fileStorage.interceptors.request.use(function (config) {
   // Do something before request is sent
-  config.headers = {Authorization: store.token};
+  config.headers = {
+    Authorization: store.token
+  };
   return config;
 }, function (error) {
   // Do something with request error
@@ -115,7 +117,7 @@ router.beforeResolve((to, from, next) => {
 })
 
 /* eslint-disable no-new */
-new Vue({
+window.app = new Vue({
   el: '#app',
   router,
   store,

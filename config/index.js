@@ -29,7 +29,16 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: require("./" + process.env.NODE_ENV + ".env").ASSETS_SUBDIR,
     assetsPublicPath: '',
-    proxyTable: {},
+    proxyTable: {
+      '/admin/**': {
+        target: 'http://sceneapp.gq',
+        changeOrigin: true
+      },
+      '/storage/**': {
+        target: 'http://sceneapp.gq',
+        changeOrigin: true
+      }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

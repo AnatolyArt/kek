@@ -289,26 +289,17 @@
         return this.lifestyle.image_url;
       },
       changeFile: function(event) {
-
         var input = event.target;
         const myFile = input.files[0];
         const reader = new FileReader()
         reader.onload = (e) => {
-
-          const result = e.target.result;
-          console.log(myFile.type);
-          const headers = {
-            'Content-Type': myFile.type,
-            'Content-Disposition': 'attachment; filename="' + myFile.name + '"'
-          }
-          this.$root.fileStorage.post('/?category=event', result, { headers: headers }).then((response) => {
+          this.$root.fileStorage.post('event', myFile).then((response) => {
             console.log(response);
           }).catch(function (error) {
             console.log(error);
           });
         }
         reader.readAsArrayBuffer(input.files[0]);
-
       },
       save(){
         if (this.lifestyle.name && this.lifestyle.description) {
