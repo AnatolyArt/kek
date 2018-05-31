@@ -116,7 +116,7 @@
                             </b-form-select>
                         </b-col>
                     </b-row>
-                    <b-row class="multiselect-margin">
+                    <b-row class="">
                         <b-col sm="12">
                             <label>Interests</label>
                             <multiselect v-model="scene.interest" :options="interests" :multiple="true" label="label"
