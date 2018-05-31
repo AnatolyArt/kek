@@ -293,10 +293,7 @@
         const myFile = input.files[0];
         const reader = new FileReader()
         reader.onload = (e) => {
-          let data = new FormData();
-          data.append('attachment', myFile, { type: 'image/jpeg' });
-
-          this.$root.fileStorage.post('event', data).then((response) => {
+          this.$root.fileStorage.post('event', myFile).then((response) => {
             console.log(response);
           }).catch(function (error) {
             console.log(error);
