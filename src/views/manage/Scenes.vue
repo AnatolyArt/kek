@@ -3,9 +3,21 @@
         <b-card :header="caption">
             <h4 slot="header"
                 class="mb-0">{{caption}}<a type="button" href="#/dictionaries/categories/add" class="btn btn-sm btn-success pull-right m-0">Add new</a></h4>
+            <b-form-group label-for="elementsAppendButton">
+                <b-input-group>
+                    <b-form-input id="elementsAppendButton" type="text" v-model="searchField" placeholder="Search..."></b-form-input>
+                    <b-input-group-button class="input-group-append">
+                        <b-button @click="getItems()" variant="primary">Find</b-button>
+                    </b-input-group-button>
+                </b-input-group>
+            </b-form-group>
             <b-table responsive="sm" :items="items" :fields="fields" ref="table">
                 <template slot="name" slot-scope="data">
                     {{ data.item.name }}
+                    <div class="scene-start-end">
+                        <span v-if="data.item.start_at">Start: {{data.item.start_at}}</span>
+                        <span v-if="data.item.end_at"> End: {{data.item.end_at}}</span>
+                    </div>
                 </template>
                 <template slot="order" slot-scope="row">
                     <i class="fa fa-arrow-down fa-lg" v-on:click="replaceRow(row.index, 0)"></i>
@@ -18,6 +30,7 @@
                     <i class="fa fa-trash-o fa-lg" v-on:click="deleteCategoryPopup(data.item.id)"></i>
                 </template>
             </b-table>
+            <b-pagination v-if="pagination.total > pagination.perPage" size="sm" @input="getItems()" :total-rows="pagination.total" v-model="pagination.currentPage" :per-page="pagination.perPage"></b-pagination>
         </b-card>
         <b-modal title="Error" class="modal-danger" v-model="errorDelete" @ok="errorDelete = false" cancel-variant=" d-none">
             You can't delete category which contains interests, please delete or move interests first.
@@ -34,21 +47,7 @@
   export default {
     name: 'Scenes',
     created(){
-      this.$root.ajax.get('interests/categories')
-        .then((response) => {
-          for(var i = 0; i < response.data.data.length; i++){
-            var value =  response.data.data[i];
-            this.items.push(
-              {
-                'id': value.id,
-                'name': value.name,
-                'interests': value.interests.length
-              })
-          }
-        }).catch(function (error) {
-        alert(error);
-      });
-
+        this.getItems();
     },
     props: {
       caption: {
@@ -58,23 +57,65 @@
     },
     data: () => {
       return {
+        pagination:{
+          total: 0,
+          perPage: 10,
+          currentPage: 1
+        },
         items: [],
         fields: [
-          {key: 'id'},
-          {key: 'name'},
-          {key: 'interests'},
-          {key: 'order'},
-          {key: 'edit'},
-          {key: 'delete'}
+          {key: 'name', label: 'Event name'},
+          {key: 'address', label: 'Address'},
+          {key: 'type', label: 'Scene type'},
+          {key: 'lifestyles', label: 'Scene lifestyles'},
+          {key: 'interests', label: 'Scene Interests'},
+          {key: 'owner', label: 'Owner'}
         ],
         delete: 0,
         errorDelete: false,
-        canDelete: false
+        canDelete: false,
+        searchField: ''
       }
     },
     methods: {
       getItems(){
-        return this.items;
+        var toSend = {
+          params:{
+            page: this.pagination.currentPage
+          }
+        };
+        if(this.searchField !== ''){
+          toSend.params.q = this.searchField;
+        }
+        this.items = [];
+        this.$root.ajax.get('/events', toSend)
+          .then((response) => {
+            for(var i = 0; i < response.data.data.length; i++){
+              var value =  response.data.data[i];
+              this.pagination.total = response.data.meta.total;
+              this.pagination.perPage = response.data.page.size;
+              let lifestyle = value.theme.map(function(elem){
+                                return elem.name;
+                              }).join(', ');
+              let interests = value.interests.map(function(elem){
+                                return elem.name;
+                              }).join(', ');
+              this.items.push(
+                {
+                  'id': value.id,
+                  'name': value.name,
+                  'address': value.address,
+                  'type': value.type,
+                  'lifestyles': lifestyle,
+                  'interests': interests,
+                  'owner': value.owner,
+                  'start_at': value.start_at,
+                  'end_at': value.end_at
+                })
+            }
+          }).catch(function (error) {
+          console.log(error);
+        });
       },
       getRowCount (items) {
         return items.length
