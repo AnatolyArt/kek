@@ -3,15 +3,11 @@ export default {
     {
       name: 'Dashboard',
       url: '/dashboard',
-      icon: 'icon-speedometer',
-      badge: {
-        variant: 'primary',
-        text: 'NEW'
-      }
+      icon: 'icon-speedometer'
     },
     {
       title: true,
-      name: 'Theme',
+      name: 'Dictionaries',
       class: '',
       wrapper: {
         element: '',
@@ -19,14 +15,33 @@ export default {
       }
     },
     {
-      name: 'Colors',
-      url: '/theme/colors',
-      icon: 'icon-drop'
+      name: 'Categories',
+      url: '/dictionaries/categories',
+      icon: 'icon-layers'
     },
     {
-      name: 'Typography',
-      url: '/theme/typography',
-      icon: 'icon-pencil'
+      name: 'Lifestyles',
+      url: '/dictionaries/lifestyles',
+      icon: 'icon-compass'
+    },
+    {
+      title: true,
+      name: 'Manage',
+      class: '',
+      wrapper: {
+        element: '',
+        attributes: {}
+      }
+    },
+    {
+      name: 'Scenes',
+      url: '/manage/scenes',
+      icon: 'icon-directions'
+    },
+    {
+      name: 'Users',
+      url: '#',
+      icon: 'icon-user'
     },
     {
       title: true,

@@ -1,12 +1,14 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+// require("./" + process.env.NODE_ENV + ".env")
+
 module.exports = {
   build: {
-    env: require('./prod.env'),
+    env: require("./" + process.env.NODE_ENV + ".env"),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: require("./" + process.env.NODE_ENV + ".env").ASSETS_SUBDIR,
     assetsPublicPath: './',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
@@ -23,11 +25,20 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 80,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: require("./" + process.env.NODE_ENV + ".env").ASSETS_SUBDIR,
     assetsPublicPath: '',
-    proxyTable: {},
+    proxyTable: {
+      '/admin/**': {
+        target: 'http://sceneapp.gq',
+        changeOrigin: true
+      },
+      '/storage/**': {
+        target: 'http://sceneapp.gq',
+        changeOrigin: true
+      }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

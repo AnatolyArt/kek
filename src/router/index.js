@@ -41,8 +41,6 @@ import CodeEditors from '@/views/editors/CodeEditors'
 import BasicForms from '@/views/forms/BasicForms'
 import AdvancedForms from '@/views/forms/AdvancedForms'
 
-import GoogleMaps from '@/views/GoogleMaps'
-
 // Views - Icons
 import Flags from '@/views/icons/Flags'
 import FontAwesome from '@/views/icons/FontAwesome'
@@ -71,6 +69,15 @@ import Compose from '@/views/ui-kits/Email/Compose'
 import Inbox from '@/views/ui-kits/Email/Inbox'
 import Message from '@/views/ui-kits/Email/Message'
 
+// Views - Dictionary
+import Categories from '@/views/dictionaries/Categories'
+import CategoryEdit from '@/views/dictionaries/CategoryEdit'
+import InterestEdit from '@/views/dictionaries/InterestEdit'
+import Lifestyles from '@/views/dictionaries/Lifestyles'
+import LifestylesEdit from '@/views/dictionaries/LifestylesEdit'
+import Scenes from '@/views/manage/Scenes'
+import SceneEdit from '@/views/manage/SceneEdit'
+
 Vue.use(Router)
 
 export default new Router({
@@ -90,22 +97,67 @@ export default new Router({
           component: Dashboard
         },
         {
-          path: 'theme',
-          redirect: '/theme/colors',
-          name: 'Theme',
+          path: 'dictionaries',
+          redirect: 'dictionaries/categories',
+          name: 'Dictionaries',
           component: {
             render (c) { return c('router-view') }
           },
           children: [
             {
-              path: 'colors',
-              name: 'Colors',
-              component: Colors
+              path: 'categories',
+              name: 'Categories',
+              component: Categories
             },
             {
-              path: 'typography',
-              name: 'Typography',
-              component: Typography
+              path: 'categories/edit/:catid',
+              name: 'Edit Category',
+              component: CategoryEdit
+            },
+            {
+              path: 'categories/add',
+              name: 'Add Category',
+              component: CategoryEdit
+            },
+            {
+              path: 'interests/edit/:id',
+              name: 'Edit interest',
+              component: InterestEdit
+            },
+            {
+              path: 'interests/add/:catid',
+              name: 'Add interest',
+              component: InterestEdit
+            },
+            {
+              path: 'lifestyles',
+              name: 'Lifestyles',
+              component: Lifestyles
+            },
+            {
+              path: 'lifestyles/edit/:themeId',
+              name: 'Add interest',
+              component: LifestylesEdit
+            }
+          ]
+        },
+        {
+          path: 'manage',
+          redirect: 'manage/scenes',
+          name: 'Manage',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'scenes',
+              name: 'Scenes',
+              component: Scenes
+            },
+            {
+              path: 'scenes/edit/:sceneId',
+              name: 'Edit Scene',
+              component: SceneEdit
             }
           ]
         },
@@ -259,11 +311,6 @@ export default new Router({
               component: AdvancedForms
             }
           ]
-        },
-        {
-          path: 'google-maps',
-          name: 'Google Maps',
-          component: GoogleMaps
         },
         {
           path: 'icons',

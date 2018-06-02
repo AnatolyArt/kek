@@ -1,1 +1,36 @@
 // Here you can add other styles
+img.thumbinal{
+   width: 150px;
+   max-height: 150px;
+}
+
+.bgthb{
+   width: 80px;
+   height: 80px;
+   background-size: cover!important;
+}
+.crop-image{
+   max-width: 150px;
+}
+
+.multiselect-margin{
+   margin: 10px 0px 10px 0px;
+}
+
+.mt10{
+   margin-top: 10px;
+}
+
+.mb10{
+   margin-bottom: 10px;
+}
+
+.close-icon-image{
+   color: white;
+   background: black;
+   top: 0px;
+   right: 1px;
+   position: absolute;
+   font-size: 18px;
+   cursor: pointer;
+}
