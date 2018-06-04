@@ -34,6 +34,7 @@ module.exports = {
     'key-spacing': 0,
     'padded-blocks': 0,
     'no-trailing-spaces': 0,
-    'spaced-comment': 0
+    'spaced-comment': 0,
+    'handle-callback-err': 0
   }
 }

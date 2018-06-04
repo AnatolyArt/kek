@@ -7,12 +7,16 @@
                     <b-row>
                         <b-col sm="12">
                             <b-form-group validated>
+                                <!--
                                 <GmapMap
                                         :center="{lat:10, lng:10}"
                                         :zoom="7"
                                         map-type-id="terrain"
                                         style="width: 500px; height: 300px"
                                 ></GmapMap>
+                                !-->
+                                <b-form-input v-model="scene.address" type="text" id="name"
+                                              placeholder="Scene name" required></b-form-input>
                                 <label>Name</label>
                                 <b-form-input v-model="scene.name" type="text" id="name"
                                               placeholder="Scene name" required></b-form-input>
@@ -23,7 +27,7 @@
                         <b-col sm="12">
                             <label>Type</label>
                             <b-form-group>
-                                <b-form-select v-model="scene.type" class="mb-3">
+                                <b-form-select v-model="scene.ownership" class="mb-3">
                                     <option value="event">Event</option>
                                     <option value="activity">Activity</option>
                                     <option value="attraction">Attraction</option>
@@ -31,17 +35,6 @@
                             </b-form-group>
                         </b-col>
                     </b-row>
-                    <b-row>
-                        <b-col sm="12">
-                            <b-form-group validated>
-                                <label>Addess</label>
-
-
-
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-
                     <b-row>
                         <b-col sm="12">
                             <b-form-group>
@@ -56,13 +49,13 @@
                             <b-form-group>
                                 <label>Start date</label>
                                 <p>
-                                    <datepicker :readonly="true" format="YYYY-MM-DD"
-                                                v-model="scene.dateFrom"></datepicker>
+                                    <date-picker lang="en" :readonly="true" format="YYYY-MM-DD"
+                                                v-model="scene.start_at"></date-picker>
                                 </p>
                                 <label>End date</label>
                                 <p>
-                                    <datepicker :readonly="true" format="YYYY-MM-DD"
-                                                v-model="scene.dateTo"></datepicker>
+                                    <date-picker lang="en" :readonly="true" format="YYYY-MM-DD"
+                                                v-model="scene.end_at"></date-picker>
                                 </p>
                             </b-form-group>
                         </b-col>
@@ -70,38 +63,45 @@
                     <b-row>
                         <b-col sm="12">
                             <label>Periodicity</label>
-                            <b-form-select v-model="scene.periodicity" class="mb-3">
-                                <option value="daily">Daily</option>
-                                <option value="scheduled">Scheduled</option>
+                            <b-form-select v-model="periodicity" class="mb-3">
+                                <option value="1">Daily</option>
+                                <option value="2">Scheduled</option>
                             </b-form-select>
                         </b-col>
                     </b-row>
-                    <b-row v-if="scene.periodicity === 'scheduled'">
+                    <b-row v-show="periodicity === '2'">
                         <b-col sm="12">
-                            <b-form-group
-                                    label="Days"
-                                    label-for="basicInlineCustomCheckboxes"
-                                    :label-cols="3"
-                                    :horizontal="true">
-                                <b-form-checkbox-group id="basicInlineCheckboxes" name="InlineCheckboxes" :plain="true"
-                                                       :checked="[1,3]">
-                                    <b-form-checkbox :plain="true" value="0">Sun</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="1">Mon</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="2">Tue</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="3">Wed</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="4">Thu</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="5">Fri</b-form-checkbox>
-                                    <b-form-checkbox :plain="true" value="6">Sat</b-form-checkbox>
-                                </b-form-checkbox-group>
+                            <b-form-group>
+
+                                    <div class="edit-scene days" v-for="(item, index) in daysOfWeek">
+                                        <label>{{item}}</label>
+                                        <b-form-input v-model="scene.days[index].from" type="text"
+                                                      placeholder="From"></b-form-input>
+                                        <b-form-input v-model="scene.days[index].to" type="text"
+                                                      placeholder="To"></b-form-input>
+                                    </div>
+
                             </b-form-group>
                         </b-col>
                     </b-row>
+                    <b-row v-show="periodicity === '1'">
+                        <b-col sm="12">
+                            <b-form-group class="edit-scene days">
+                                <label>Time</label>
+                                <b-form-input v-model="scene.days[0].from" type="text"
+                                              placeholder="From"></b-form-input>
+                                <b-form-input v-model="scene.days[0].to" type="text"
+                                              placeholder="To"></b-form-input>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+
                     <b-row>
                         <b-col sm="12">
                             <label>Privacy</label>
                             <b-form-select v-model="scene.privacy" class="mb-3">
-                                <option value="1">Public</option>
-                                <option value="0">Private</option>
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
                             </b-form-select>
                         </b-col>
                     </b-row>
@@ -112,14 +112,14 @@
                                            :plain="true"
                                            :multiple="true"
                                            :options="lifestyles"
-                                           v-model="scene.lifestyle">
+                                           v-model="scene.lifestyles">
                             </b-form-select>
                         </b-col>
                     </b-row>
                     <b-row class="">
                         <b-col sm="12">
                             <label>Interests</label>
-                            <multiselect v-model="scene.interest" :options="interests" :multiple="true" label="label"
+                            <multiselect v-model="scene.interests" :options="interests" :multiple="true" label="label"
                                          track-by="label"></multiselect>
                         </b-col>
                     </b-row>
@@ -147,14 +147,14 @@
                     <b-row>
                         <b-col sm="12">
                             <label>Video link</label>
-                            <b-form-input v-model="scene.video" type="text" id="video"
+                            <b-form-input v-model="scene.video_link" type="text" id="video"
                                           placeholder="Video link"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col sm="12">
-                            <label>Owner</label>
-                            <b-form-input v-model="scene.owner" type="text" id="owner"
+                            <label>Author ID</label>
+                            <b-form-input v-model="scene.author.id" type="text" id="owner"
                                           placeholder="Owner ID"></b-form-input>
                         </b-col>
                     </b-row>
@@ -168,13 +168,12 @@
                                 <grid
                                         :draggable="true"
                                         :sortable="true"
-                                        :items="imagesList"
+                                        :items="scene.attachments"
                                         :cellWidth="81"
                                         :cellHeight="81">
                                     <template slot="cell" scope="props">
-                                        <div class="bgthb" v-bind:style="{ background: 'url(' + props.item + ')' }">
-                                            <i @click="removeImage(props.item)" class="fa fa-close close-icon-image"></i>
-                                        </div>
+                                        <div class="bgthb" @click="openPopUp(props.item)" v-bind:style="{ background: 'url(' + props.item.url + ')' }"></div>
+                                        <i @click="removeImage(props.item)" class="fa fa-close close-icon-image"></i>
                                     </template>
                                 </grid>
                             </div>
@@ -195,15 +194,12 @@
                 <b-card>
                     <h4 slot="header" class="mb-0">Scene stats</h4>
                     Coming soon
-
-
-
                 </b-card>
             </b-col>
         </b-row>
-        <b-modal :title="lifestyle.name" v-model="myModal" @ok="myModal = false" cancel-variant=" d-none"
+        <b-modal v-model="popUpImage" @ok="popUpImage = false" cancel-variant=" d-none"
                  ok-variant=" d-none">
-            <img :src="`${lifestyle.image_url}`" class="img-fluid"/>
+            <img :src="`${popUpImageUrl}`" class="img-fluid"/>
         </b-modal>
     </div>
 </template>
@@ -212,19 +208,44 @@
   import VueBase64FileUpload from 'vue-base64-file-upload';
   import VueNotifications from 'vue-notifications'
   import miniToastr from 'mini-toastr'
-  import datepicker from 'vue-date-picker';
+  import DatePicker from 'vue2-datepicker'
   import Multiselect from 'vue-multiselect'
 
   export default {
     name: 'SceneEdit',
     components: {
       VueBase64FileUpload,
-      datepicker,
+      DatePicker,
       Multiselect
     },
     created(){
       this.scene.type = 'event';
       this.scene.privacy = '1';
+      if(this.$route.params.sceneId){
+        this.$root.ajax.get('/events/' + this.$route.params.sceneId)
+          .then((response) => {
+            this.scene = response.data.data;
+            if(this.scene.days.length === 7){
+              this.periodicity = '1';
+            }else{
+              this.periodicity = '2';
+            }
+            let lifestyles = this.scene.theme.map(function(elem) {
+              return elem.id
+            });
+            this.scene.lifestyles = lifestyles;
+
+            let interests = this.scene.interests.map(function(elem) {
+              return {'value': elem.id, 'label': elem.name};
+            });
+            this.scene.interests = interests;
+            console.log(interests);
+          }).catch(function (error) {
+          alert(error);
+        });
+      }
+
+
       // Get Lifestyles change after to ubermethod
       this.$root.ajax.get('themes')
         .then((response) => {
@@ -232,7 +253,7 @@
             var theme = response.data.data[i];
             this.lifestyles.push({
               text: theme.name,
-              label: theme.id
+              value: theme.id
             })
           }
           console.log(this.lifestyles);
@@ -271,6 +292,7 @@
     },
     data: () => {
       return {
+        periodicity: 1,
         scene: {},
         lifestyle: {},
         lifestyles: [],
@@ -282,18 +304,32 @@
         valide: true,
         fileLink: '',
         imageFile: '',
+        popUpImage: false,
         imagesList:[
           'http://s1.1zoom.me/big3/81/Russia_Mountains_Lake_469922.jpg',
           'https://img.fonwall.ru/o/zi/kanchanaburi-tailand-vodopad-kaskad-c4gb.jpg',
           'http://widefon.com/_ld/138/22846116.jpg'
+        ],
+        daysOfWeek: [
+          'Sun',
+          'Mon',
+          'Tue',
+          'Wed',
+          'Thu',
+          'Fri',
+          'Sat'
         ]
       }
     },
     methods: {
       removeImage (img) {
-        var index = this.imagesList.indexOf(img);
-        if (index !== -1) this.imagesList.splice(index, 1);
+        var index = this.scene.attachments.indexOf(img);
+        if (index !== -1) this.scene.attachments.splice(index, 1);
         //ajax to remove image
+      },
+      openPopUp(item){
+        this.popUpImageUrl = item.url;
+        this.popUpImage = true;
       },
       getImage(){
         if (this.imagePreview) {
@@ -309,6 +345,7 @@
           this.$root.fileStorage.post('/event', myFile).then((response) => {
             myFile = null;
             input.value = '';
+            this.scene.attachments.push({'url': response.data.attachment.url, 'id': response.data.attachment.id});
           }).catch(function (error) {
             console.log(error);
           });

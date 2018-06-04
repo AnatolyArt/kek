@@ -13,7 +13,7 @@
             </b-form-group>
             <b-table responsive="sm" :items="items" :fields="fields" ref="table">
                 <template slot="name" slot-scope="data">
-                    {{ data.item.name }}
+                    <a :href="`#/manage/scenes/edit/${data.item.id}`">{{ data.item.name }}</a>
                     <div class="scene-start-end">
                         <span v-if="data.item.start_at">Start: {{data.item.start_at}}</span>
                         <span v-if="data.item.end_at"> End: {{data.item.end_at}}</span>
