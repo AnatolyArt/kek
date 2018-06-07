@@ -7,6 +7,9 @@
   "copyright": "Copyright 2017 creativeLabs Łukasz Holeczek",
   "license": "http://coreui.io/pro/license/",
   "private": true,
+  "notes":[
+    "use this hack if vue-loader has troubles: https://stackoverflow.com/questions/50561649/module-build-failed-error-no-parser-and-no-file-path-given-couldnt-infer-a-p"
+  ],
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
